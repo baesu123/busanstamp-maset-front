@@ -4,9 +4,7 @@ const ACCESS_TOKEN_KEY = "accessToken";
 
 export const useAuthStore = create((set) => ({
   user: null,
-
   accessToken: localStorage.getItem(ACCESS_TOKEN_KEY),
-
   // 최초 인증 확인이 끝났는지 여부
   isInitialized: false,
 
