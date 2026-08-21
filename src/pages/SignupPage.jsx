@@ -21,9 +21,10 @@ function SignupPage() {
   const [validationError, setValidationError] = useState("");
 
   const signupMutation = useMutation({
-    mutationFn: signup,
+    mutationFn: signup, //authApi의 signup 함수 사용
 
     onSuccess: () => {
+      //성공 시 실행됨
       navigate("/login", {
         replace: true,
         state: {
@@ -53,6 +54,7 @@ function SignupPage() {
       return;
     }
 
+    //텐스택쿼리 signupMutation의 signup 함수 실행 {이메일, 패스워드, 닉네임}
     signupMutation.mutate({
       email: form.email.trim(),
       password: form.password,
