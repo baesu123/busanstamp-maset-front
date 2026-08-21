@@ -37,11 +37,11 @@ apiClient.interceptors.response.use(
   (response) => response,
 
   (error) => {
-    const status = error.response?.status;
-    const requestUrl = error.config?.url ?? "";
-
+    const status = error.response?.status; //에러 상태코드 확인
+    const requestUrl = error.config?.url ?? ""; //에러 요청주소 확인
+    //로그인 요청인지 확인 (참, 거짓)
     const isLoginRequest = requestUrl.includes("/auth/login");
-
+    //jwt 액세스 토큰이 있는지 확인
     const hasAccessToken = Boolean(useAuthStore.getState().accessToken);
 
     if (status === 401 && !isLoginRequest && hasAccessToken) {
