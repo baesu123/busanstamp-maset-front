@@ -15,6 +15,7 @@ import PlaceDetailPage from "../pages/PlaceDetailPage";
 import PlaceListPage from "../pages/PlaceListPage";
 import SignupPage from "../pages/SignupPage";
 import KakaoSearchPage from "../pages/admin/KakaoSearchPage";
+import MapPage from "../pages/MapPage";
 
 function AppRouter() {
   return (
@@ -26,6 +27,8 @@ function AppRouter() {
         <Route path="login" element={<LoginPage />} />
 
         <Route path="signup" element={<SignupPage />} />
+
+        <Route path="map" element={<MapPage />} />
 
         <Route path="places">
           <Route index element={<PlaceListPage />} />
