@@ -1,10 +1,12 @@
-import { Route, Routes } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 
 import AdminRoute from "../components/auth/AdminRoute";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 import MainLayout from "../components/layout/MainLayout";
 
-import AdminHomePage from "../pages/AdminHomePage";
+import AdminPlaceFormPage from "../pages/admin/AdminPlaceFormPage";
+import AdminPlaceListPage from "../pages/admin/AdminPlaceListPage";
+
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
 import MyPage from "../pages/MyPage";
@@ -36,8 +38,14 @@ function AppRouter() {
         </Route>
 
         {/* 관리자 전용 */}
-        <Route element={<AdminRoute />}>
-          <Route path="admin" element={<AdminHomePage />} />
+        <Route path="admin" element={<AdminRoute />}>
+          <Route index element={<Navigate to="places" replace />} />
+
+          <Route path="places" element={<AdminPlaceListPage />} />
+
+          <Route path="places/new" element={<AdminPlaceFormPage />} />
+
+          <Route path="places/:placeId/edit" element={<AdminPlaceFormPage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />
