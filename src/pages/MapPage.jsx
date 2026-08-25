@@ -10,16 +10,16 @@ import { useCurrentLocation } from "../hooks/useCurrentLocation";
 
 function MapPage() {
   const mapRef = useRef(null);
-
   const [selectedPlace, setSelectedPlace] = useState(null);
-
   const [keyword, setKeyword] = useState("");
+
   const {
     location,
     isLoading: isLocationLoading,
     error: locationError,
     requestLocation,
   } = useCurrentLocation();
+
   const {
     data: places = [],
     isPending,
@@ -99,8 +99,7 @@ function MapPage() {
 
       mapRef.current?.moveToLocation(currentLocation);
     } catch {
-      // 메시지는
-      // locationError 상태로 표시
+      return <PageMessage message={locationError} />;
     }
   };
 
@@ -131,20 +130,36 @@ function MapPage() {
               지도에서 관광 장소를 찾아보세요.
             </p>
           </div>
+
           <button
             type="button"
             onClick={handleCurrentLocation}
             disabled={isLocationLoading}
             className="
-    rounded-xl bg-blue-600
-    px-5 py-3 font-semibold
-    text-white transition
-    hover:bg-blue-500
-    disabled:bg-slate-400
-  "
+          rounded-xl bg-blue-600
+          px-5 py-3 font-semibold
+          text-white transition
+          hover:bg-blue-500
+          disabled:bg-slate-400
+        "
           >
             {isLocationLoading ? "현재 위치 확인 중..." : "📍 내 위치 찾기"}
           </button>
+
+          {location && (
+            <div className="rounded-xl bg-blue-50 px-4 py-3 text-sm text-blue-700">
+              현재 위치를 확인했습니다.
+              <span className="ml-2">
+                정확도 약 {Math.round(location.accuracy)}m
+              </span>
+            </div>
+          )}
+
+          {locationError && (
+            <div className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+              {locationError}
+            </div>
+          )}
         </div>
       </div>
 
@@ -177,7 +192,15 @@ function MapPage() {
         {/* 장소 목록 */}
         <aside>
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="font-bold">관광 장소</h2>
+            <h2 className="font-bold">
+              {location ? "내 주변 관광 장소" : "관광 장소"}
+            </h2>
+
+            {location && (
+              <p className="mt-1 text-xs text-slate-400">
+                현재 위치에서 가까운 순
+              </p>
+            )}
 
             <span className="text-sm text-slate-500">
               {displayPlaces.length}개
@@ -194,6 +217,7 @@ function MapPage() {
                 <MapPlaceCard
                   key={place.placeId}
                   place={place}
+                  distance={place.distance}
                   selected={selectedPlace?.placeId === place.placeId}
                   onClick={handleSelectPlace}
                 />
@@ -206,6 +230,7 @@ function MapPage() {
         <KakaoMap
           ref={mapRef}
           places={displayPlaces}
+          userLocation={location}
           selectedPlaceId={selectedPlace?.placeId}
           onSelectPlace={handleSelectPlace}
         />
