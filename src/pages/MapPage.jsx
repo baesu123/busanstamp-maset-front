@@ -93,6 +93,17 @@ function MapPage() {
     mapRef.current?.moveToPlace(place);
   }, []);
 
+  const handleCurrentLocation = async () => {
+    try {
+      const currentLocation = await requestLocation();
+
+      mapRef.current?.moveToLocation(currentLocation);
+    } catch {
+      // 메시지는
+      // locationError 상태로 표시
+    }
+  };
+
   if (isPending) {
     return <PageMessage message="관광 장소를 불러오는 중입니다." />;
   }
@@ -120,6 +131,20 @@ function MapPage() {
               지도에서 관광 장소를 찾아보세요.
             </p>
           </div>
+          <button
+            type="button"
+            onClick={handleCurrentLocation}
+            disabled={isLocationLoading}
+            className="
+    rounded-xl bg-blue-600
+    px-5 py-3 font-semibold
+    text-white transition
+    hover:bg-blue-500
+    disabled:bg-slate-400
+  "
+          >
+            {isLocationLoading ? "현재 위치 확인 중..." : "📍 내 위치 찾기"}
+          </button>
         </div>
       </div>
 
