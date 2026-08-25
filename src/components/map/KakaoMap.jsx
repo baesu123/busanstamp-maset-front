@@ -15,9 +15,9 @@ const KakaoMap = forwardRef(function KakaoMap(
 
   const mapRef = useRef(null);
   const markersRef = useRef([]);
-
   const openInfoWindwoRef = useRef(null);
   const userOverlayRef = useRef(null);
+
   const { isLoaded, error } = useKakaoMapLoader();
 
   /*
@@ -26,9 +26,10 @@ const KakaoMap = forwardRef(function KakaoMap(
    */
   useImperativeHandle(
     ref,
+
     () => ({
       moveToPlace(place) {
-        if (!mapRef.current || !window.kakao) {
+        if (!mapRef.current) {
           return;
         }
 
@@ -41,10 +42,25 @@ const KakaoMap = forwardRef(function KakaoMap(
 
         mapRef.current.setLevel(4);
       },
+
+      moveToLocation(location) {
+        if (!mapRef.current) {
+          return;
+        }
+
+        const position = new window.kakao.maps.LatLng(
+          Number(location.latitude),
+          Number(location.longitude),
+        );
+
+        mapRef.current.panTo(position);
+
+        mapRef.current.setLevel(4);
+      },
     }),
+
     [],
   );
-
   /*
    * 최초 지도 생성
    */
@@ -66,77 +82,77 @@ const KakaoMap = forwardRef(function KakaoMap(
     });
   }, [isLoaded]);
 
-  // useEffect(() => {
-  //   if (!isLoaded || !mapRef.current) {
-  //     return;
-  //   }
+  useEffect(() => {
+    if (!isLoaded || !mapRef.current) {
+      return;
+    }
 
-  //   const kakao = window.kakao;
+    const kakao = window.kakao;
 
-  //   /*
-  //    * 기존 내 위치 표시 제거
-  //    */
-  //   if (userOverlayRef.current) {
-  //     userOverlayRef.current.setMap(null);
+    /*
+     * 기존 내 위치 표시 제거
+     */
+    if (userOverlayRef.current) {
+      userOverlayRef.current.setMap(null);
 
-  //     userOverlayRef.current = null;
-  //   }
+      userOverlayRef.current = null;
+    }
 
-  //   if (!userLocation) {
-  //     return;
-  //   }
+    if (!userLocation) {
+      return;
+    }
 
-  //   const position = new kakao.maps.LatLng(
-  //     Number(userLocation.latitude),
-  //     Number(userLocation.longitude),
-  //   );
+    const position = new kakao.maps.LatLng(
+      Number(userLocation.latitude),
+      Number(userLocation.longitude),
+    );
 
-  //   /*
-  //    * 내 위치 표시용 DOM
-  //    */
-  //   const wrapper = document.createElement("div");
+    /*
+     * 내 위치 표시용 DOM
+     */
+    const wrapper = document.createElement("div");
 
-  //   wrapper.style.display = "flex";
-  //   wrapper.style.alignItems = "center";
-  //   wrapper.style.justifyContent = "center";
+    wrapper.style.display = "flex";
+    wrapper.style.alignItems = "center";
+    wrapper.style.justifyContent = "center";
 
-  //   wrapper.style.width = "26px";
-  //   wrapper.style.height = "26px";
+    wrapper.style.width = "26px";
+    wrapper.style.height = "26px";
 
-  //   wrapper.style.borderRadius = "50%";
+    wrapper.style.borderRadius = "50%";
 
-  //   wrapper.style.background = "rgba(37, 99, 235, 0.2)";
+    wrapper.style.background = "rgba(37, 99, 235, 0.2)";
 
-  //   const dot = document.createElement("div");
+    const dot = document.createElement("div");
 
-  //   dot.style.width = "14px";
-  //   dot.style.height = "14px";
+    dot.style.width = "14px";
+    dot.style.height = "14px";
 
-  //   dot.style.borderRadius = "50%";
+    dot.style.borderRadius = "50%";
 
-  //   dot.style.background = "#2563eb";
+    dot.style.background = "#2563eb";
 
-  //   dot.style.border = "3px solid white";
+    dot.style.border = "3px solid white";
 
-  //   dot.style.boxShadow = "0 1px 6px rgba(0,0,0,0.3)";
+    dot.style.boxShadow = "0 1px 6px rgba(0,0,0,0.3)";
 
-  //   wrapper.appendChild(dot);
+    wrapper.appendChild(dot);
 
-  //   const overlay = new kakao.maps.CustomOverlay({
-  //     map: mapRef.current,
-  //     position,
-  //     content: wrapper,
-  //     xAnchor: 0.5,
-  //     yAnchor: 0.5,
-  //     zIndex: 10,
-  //   });
+    const overlay = new kakao.maps.CustomOverlay({
+      map: mapRef.current,
+      position,
+      content: wrapper,
+      xAnchor: 0.5,
+      yAnchor: 0.5,
+      zIndex: 10,
+    });
 
-  //   userOverlayRef.current = overlay;
+    userOverlayRef.current = overlay;
 
-  //   return () => {
-  //     overlay.setMap(null);
-  //   };
-  // }, [isLoaded, userLocation]);
+    return () => {
+      overlay.setMap(null);
+    };
+  }, [isLoaded, userLocation]);
 
   /*
    * places가 바뀔 때마다
