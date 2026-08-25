@@ -8,15 +8,14 @@ const DEFAULT_CENTER = {
 };
 
 const KakaoMap = forwardRef(function KakaoMap(
-  { places, selectedPlaceId, onSelectPlace },
+  { places, userLocation, selectedPlaceId, onSelectPlace },
   ref,
 ) {
   const containerRef = useRef(null);
-
   const mapRef = useRef(null);
   const markersRef = useRef([]);
-  const openInfoWindwoRef = useRef(null);
-  const userOverlayRef = useRef(null);
+  const openInfoWindowRef = useRef(null); //빈 ref 객체
+  const userOverlayRef = useRef(null); //빈 ref 객체
 
   const { isLoaded, error } = useKakaoMapLoader();
 
@@ -26,10 +25,9 @@ const KakaoMap = forwardRef(function KakaoMap(
    */
   useImperativeHandle(
     ref,
-
     () => ({
       moveToPlace(place) {
-        if (!mapRef.current) {
+        if (!mapRef.current || !window.kakao) {
           return;
         }
 
@@ -42,7 +40,6 @@ const KakaoMap = forwardRef(function KakaoMap(
 
         mapRef.current.setLevel(4);
       },
-
       moveToLocation(location) {
         if (!mapRef.current) {
           return;
@@ -58,9 +55,9 @@ const KakaoMap = forwardRef(function KakaoMap(
         mapRef.current.setLevel(4);
       },
     }),
-
     [],
   );
+
   /*
    * 최초 지도 생성
    */
@@ -82,6 +79,7 @@ const KakaoMap = forwardRef(function KakaoMap(
     });
   }, [isLoaded]);
 
+  // 내 위치 표시 추가하기
   useEffect(() => {
     if (!isLoaded || !mapRef.current) {
       return;
@@ -221,9 +219,9 @@ const KakaoMap = forwardRef(function KakaoMap(
 
       //클릭 이벤트시 인포컨텐츠도 나옴
       kakao.maps.event.addListener(marker, "click", () => {
-        openInfoWindwoRef.current?.close();
+        openInfoWindowRef.current?.close();
         infoWindow.open(map, marker); // 추가
-        openInfoWindwoRef.current = infoWindow;
+        openInfoWindowRef.current = infoWindow; //현재 선택된 인포윈도우
         onSelectPlace(place);
       });
 
@@ -241,17 +239,16 @@ const KakaoMap = forwardRef(function KakaoMap(
      */
     if (markersRef.current.length === 1) {
       const place = places[0];
-
       const position = new kakao.maps.LatLng(
         Number(place.latitude),
         Number(place.longitude),
       );
-
       map.setCenter(position);
-      map.setLevel(4); //1개 장소일때 4레벨 확대s
+      map.setLevel(4); //1개 장소일때 4레벨 확대
     } else if (markersRef.current.length > 1) {
-      map.setBounds(bounds);
+      map.setBounds(bounds); //2개 이상일때 자동설정
     }
+
     return () => {
       markersRef.current.forEach(({ marker }) => {
         marker.setMap(null);

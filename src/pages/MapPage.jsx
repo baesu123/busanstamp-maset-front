@@ -1,15 +1,12 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-
 import { useQuery } from "@tanstack/react-query";
-
 import { MapPinned, Search } from "lucide-react";
-
 import { getPlaces } from "../api/placeApi";
-
 import KakaoMap from "../components/map/KakaoMap";
 import MapPlaceCard from "../components/map/MapPlaceCard";
-
 import { getApiErrorMessage } from "../utils/getApiErrorMessage";
+import { calculateDistance } from "../utils/distance";
+import { useCurrentLocation } from "../hooks/useCurrentLocation";
 
 function MapPage() {
   const mapRef = useRef(null);
@@ -17,7 +14,12 @@ function MapPage() {
   const [selectedPlace, setSelectedPlace] = useState(null);
 
   const [keyword, setKeyword] = useState("");
-
+  const {
+    location,
+    isLoading: isLocationLoading,
+    error: locationError,
+    requestLocation,
+  } = useCurrentLocation();
   const {
     data: places = [],
     isPending,
@@ -32,20 +34,58 @@ function MapPage() {
    * 지도 페이지 안에서 간단한
    * 클라이언트 검색을 수행합니다.
    */
-  const filteredPlaces = useMemo(() => {
+  const displayPlaces = useMemo(() => {
     const search = keyword.trim().toLowerCase();
 
-    if (!search) {
-      return places;
-    }
+    /*
+     * 검색
+     */
+    let result = places.filter((place) => {
+      if (!search) {
+        return true;
+      }
 
-    return places.filter(
-      (place) =>
+      return (
         place.name?.toLowerCase().includes(search) ||
         place.address?.toLowerCase().includes(search) ||
-        place.category?.toLowerCase().includes(search),
-    );
-  }, [places, keyword]);
+        place.category?.toLowerCase().includes(search)
+      );
+    });
+
+    /*
+     * 현재 위치가 없으면
+     * 거리 계산하지 않음
+     */
+    if (!location) {
+      return result.map((place) => ({
+        ...place,
+        distance: null,
+      }));
+    }
+
+    /*
+     * 거리 계산
+     */
+    result = result.map((place) => ({
+      ...place,
+
+      distance: calculateDistance(
+        location.latitude,
+        location.longitude,
+
+        Number(place.latitude),
+
+        Number(place.longitude),
+      ),
+    }));
+
+    /*
+     * 가까운 순
+     */
+    result.sort((a, b) => a.distance - b.distance);
+
+    return result;
+  }, [places, keyword, location]);
 
   const handleSelectPlace = useCallback((place) => {
     setSelectedPlace(place);
@@ -115,17 +155,17 @@ function MapPage() {
             <h2 className="font-bold">관광 장소</h2>
 
             <span className="text-sm text-slate-500">
-              {filteredPlaces.length}개
+              {displayPlaces.length}개
             </span>
           </div>
 
           <div className="max-h-[600px] space-y-4 overflow-y-auto pr-2">
-            {filteredPlaces.length === 0 ? (
+            {displayPlaces.length === 0 ? (
               <div className="rounded-2xl bg-slate-100 p-8 text-center text-sm text-slate-500">
                 검색된 장소가 없습니다.
               </div>
             ) : (
-              filteredPlaces.map((place) => (
+              displayPlaces.map((place) => (
                 <MapPlaceCard
                   key={place.placeId}
                   place={place}
@@ -140,7 +180,7 @@ function MapPage() {
         {/* 카카오 지도 */}
         <KakaoMap
           ref={mapRef}
-          places={filteredPlaces}
+          places={displayPlaces}
           selectedPlaceId={selectedPlace?.placeId}
           onSelectPlace={handleSelectPlace}
         />
