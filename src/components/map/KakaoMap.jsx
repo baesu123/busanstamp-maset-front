@@ -16,6 +16,8 @@ const KakaoMap = forwardRef(function KakaoMap(
   const mapRef = useRef(null);
   const markersRef = useRef([]);
 
+  const openInfoWindwoRef = useRef(null);
+
   const { isLoaded, error } = useKakaoMapLoader();
 
   /*
@@ -131,7 +133,9 @@ const KakaoMap = forwardRef(function KakaoMap(
 
       //클릭 이벤트시 인포컨텐츠도 나옴
       kakao.maps.event.addListener(marker, "click", () => {
+        openInfoWindwoRef.current?.close();
         infoWindow.open(map, marker); // 추가
+        openInfoWindwoRef.current = infoWindow;
         onSelectPlace(place);
       });
 
