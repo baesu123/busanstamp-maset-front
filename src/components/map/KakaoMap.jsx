@@ -17,7 +17,7 @@ const KakaoMap = forwardRef(function KakaoMap(
   const markersRef = useRef([]);
 
   const openInfoWindwoRef = useRef(null);
-
+  const userOverlayRef = useRef(null);
   const { isLoaded, error } = useKakaoMapLoader();
 
   /*
@@ -65,6 +65,78 @@ const KakaoMap = forwardRef(function KakaoMap(
       level: 8,
     });
   }, [isLoaded]);
+
+  // useEffect(() => {
+  //   if (!isLoaded || !mapRef.current) {
+  //     return;
+  //   }
+
+  //   const kakao = window.kakao;
+
+  //   /*
+  //    * 기존 내 위치 표시 제거
+  //    */
+  //   if (userOverlayRef.current) {
+  //     userOverlayRef.current.setMap(null);
+
+  //     userOverlayRef.current = null;
+  //   }
+
+  //   if (!userLocation) {
+  //     return;
+  //   }
+
+  //   const position = new kakao.maps.LatLng(
+  //     Number(userLocation.latitude),
+  //     Number(userLocation.longitude),
+  //   );
+
+  //   /*
+  //    * 내 위치 표시용 DOM
+  //    */
+  //   const wrapper = document.createElement("div");
+
+  //   wrapper.style.display = "flex";
+  //   wrapper.style.alignItems = "center";
+  //   wrapper.style.justifyContent = "center";
+
+  //   wrapper.style.width = "26px";
+  //   wrapper.style.height = "26px";
+
+  //   wrapper.style.borderRadius = "50%";
+
+  //   wrapper.style.background = "rgba(37, 99, 235, 0.2)";
+
+  //   const dot = document.createElement("div");
+
+  //   dot.style.width = "14px";
+  //   dot.style.height = "14px";
+
+  //   dot.style.borderRadius = "50%";
+
+  //   dot.style.background = "#2563eb";
+
+  //   dot.style.border = "3px solid white";
+
+  //   dot.style.boxShadow = "0 1px 6px rgba(0,0,0,0.3)";
+
+  //   wrapper.appendChild(dot);
+
+  //   const overlay = new kakao.maps.CustomOverlay({
+  //     map: mapRef.current,
+  //     position,
+  //     content: wrapper,
+  //     xAnchor: 0.5,
+  //     yAnchor: 0.5,
+  //     zIndex: 10,
+  //   });
+
+  //   userOverlayRef.current = overlay;
+
+  //   return () => {
+  //     overlay.setMap(null);
+  //   };
+  // }, [isLoaded, userLocation]);
 
   /*
    * places가 바뀔 때마다
