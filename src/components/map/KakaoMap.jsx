@@ -151,10 +151,19 @@ const KakaoMap = forwardRef(function KakaoMap(
      * 모든 관광 장소 마커가
      * 화면에 들어오도록 자동 조정
      */
-    if (markersRef.current.length > 0) {
+    if (markersRef.current.length === 1) {
+      const place = places[0];
+
+      const position = new kakao.maps.LatLng(
+        Number(place.latitude),
+        Number(place.longitude),
+      );
+
+      map.setCenter(position);
+      map.setLevel(4); //1개 장소일때 4레벨 확대s
+    } else if (markersRef.current.length > 1) {
       map.setBounds(bounds);
     }
-
     return () => {
       markersRef.current.forEach(({ marker }) => {
         marker.setMap(null);
