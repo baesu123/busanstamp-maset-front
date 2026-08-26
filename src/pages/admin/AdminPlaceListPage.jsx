@@ -1,14 +1,11 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-
 import { Edit3, MapPin, Search, Trash2 } from "lucide-react";
-
 import { Link } from "react-router";
-
 import { deleteAdminPlace, getPlaces } from "../../api/placeApi";
-
 import AdminPageHeader from "../../components/admin/AdminPageHeader";
 import { getApiErrorMessage } from "../../utils/getApiErrorMessage";
+import { Edit3, MapPin, QrCode, Trash2 } from "lucide-react";
 
 const INITIAL_SEARCH = {
   keyword: "",
@@ -264,6 +261,22 @@ function AdminPlaceRow({ place, isDeleting, onDelete }) {
           {place.category}
         </span>
       </div>
+
+      <Link
+        to={`/admin/places/${place.placeId}/qr`}
+        className="
+          flex items-center gap-1
+          rounded-lg
+          border border-violet-200
+          px-3 py-2
+          text-sm font-semibold
+          text-violet-600
+          hover:bg-violet-50
+          "
+      >
+        <QrCode size={16} />
+        QR
+      </Link>
 
       <div className="flex gap-2">
         <Link

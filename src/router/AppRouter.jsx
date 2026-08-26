@@ -47,6 +47,8 @@ function AppRouter() {
           <Route path="places" element={<AdminPlaceListPage />} />
           <Route path="places/new" element={<AdminPlaceFormPage />} />
           <Route path="places/:placeId/edit" element={<AdminPlaceFormPage />} />
+          <Route path="places/:placeId/qr" element={<AdminPlaceQrPage />} />
+
           <Route path="kakao-search" element={<KakaoSearchPage />} />
         </Route>
 
