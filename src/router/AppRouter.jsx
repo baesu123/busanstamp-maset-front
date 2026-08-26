@@ -18,6 +18,7 @@ import SignupPage from "../pages/SignupPage";
 import KakaoSearchPage from "../pages/admin/KakaoSearchPage";
 import MapPage from "../pages/MapPage";
 import CheckinPage from "../pages/CheckinPage";
+import StampBookPage from "../pages/StampBookPage";
 
 function AppRouter() {
   return (
@@ -42,6 +43,7 @@ function AppRouter() {
         <Route element={<ProtectedRoute />}>
           <Route path="mypage" element={<MyPage />} />
           <Route path="checkin" element={<CheckinPage />} />
+          <Route path="stamps" element={<StampBookPage />} />
         </Route>
 
         {/* 관리자 전용 */}

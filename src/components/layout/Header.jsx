@@ -1,4 +1,4 @@
-import { LogOut, MapPinned, Settings, UserRound } from "lucide-react";
+import { LogOut, MapPinned, Settings, Stamp, UserRound } from "lucide-react";
 
 import { NavLink, useNavigate } from "react-router";
 
@@ -58,6 +58,14 @@ function Header() {
 
           {user ? (
             <>
+              {user && (
+                <NavLink to="/stamps" className={getLinkClassName}>
+                  <span className="flex items-center gap-1">
+                    <Stamp size={16} />내 스탬프
+                  </span>
+                </NavLink>
+              )}
+
               <NavLink to="/mypage" className={getLinkClassName}>
                 <span className="flex items-center gap-1">
                   <UserRound size={16} />
