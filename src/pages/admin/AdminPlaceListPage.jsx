@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Edit3, MapPin, Search, Trash2 } from "lucide-react";
+
+import { Edit3, MapPin, QrCode, Search, Trash2 } from "lucide-react";
+
 import { Link } from "react-router";
+
 import { deleteAdminPlace, getPlaces } from "../../api/placeApi";
+
 import AdminPageHeader from "../../components/admin/AdminPageHeader";
 import { getApiErrorMessage } from "../../utils/getApiErrorMessage";
-import { Edit3, MapPin, QrCode, Trash2 } from "lucide-react";
 
 const INITIAL_SEARCH = {
   keyword: "",
@@ -237,7 +240,7 @@ function SearchForm({ searchForm, onChange, onSubmit, onReset }) {
 
 function AdminPlaceRow({ place, isDeleting, onDelete }) {
   return (
-    <article className="grid gap-4 px-5 py-5 md:grid-cols-[90px_1fr_160px_160px] md:items-center">
+    <article className="grid gap-4 px-5 py-5 md:grid-cols-[90px_1fr_120px_220px] md:items-center">
       <div className="text-sm font-semibold text-slate-400">
         #{place.placeId}
       </div>
@@ -262,23 +265,23 @@ function AdminPlaceRow({ place, isDeleting, onDelete }) {
         </span>
       </div>
 
-      <Link
-        to={`/admin/places/${place.placeId}/qr`}
-        className="
-          flex items-center gap-1
-          rounded-lg
-          border border-violet-200
-          px-3 py-2
-          text-sm font-semibold
-          text-violet-600
-          hover:bg-violet-50
-          "
-      >
-        <QrCode size={16} />
-        QR
-      </Link>
-
       <div className="flex gap-2">
+        <Link
+          to={`/admin/places/${place.placeId}/qr`}
+          className="
+            flex items-center gap-1
+            rounded-lg
+            border border-violet-200
+            px-3 py-2
+            text-sm font-semibold
+            text-violet-600
+            hover:bg-violet-50
+          "
+        >
+          <QrCode size={16} />
+          QR
+        </Link>
+
         <Link
           to={`/admin/places/${place.placeId}/edit`}
           className="

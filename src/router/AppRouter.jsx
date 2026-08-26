@@ -6,6 +6,7 @@ import MainLayout from "../components/layout/MainLayout";
 
 import AdminPlaceFormPage from "../pages/admin/AdminPlaceFormPage";
 import AdminPlaceListPage from "../pages/admin/AdminPlaceListPage";
+import AdminPlaceQrPage from "../pages/admin/AdminPlaceQrPage";
 
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
@@ -16,6 +17,7 @@ import PlaceListPage from "../pages/PlaceListPage";
 import SignupPage from "../pages/SignupPage";
 import KakaoSearchPage from "../pages/admin/KakaoSearchPage";
 import MapPage from "../pages/MapPage";
+import CheckinPage from "../pages/CheckinPage";
 
 function AppRouter() {
   return (
@@ -39,6 +41,7 @@ function AppRouter() {
         {/* 로그인 사용자 전용 */}
         <Route element={<ProtectedRoute />}>
           <Route path="mypage" element={<MyPage />} />
+          <Route path="checkin" element={<CheckinPage />} />
         </Route>
 
         {/* 관리자 전용 */}
