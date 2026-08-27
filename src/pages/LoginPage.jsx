@@ -28,9 +28,8 @@ function LoginPage() {
       });
 
       //const previousPath = location.state?.from?.pathname;
-
       const from = location.state?.from;
-      //토큰도 저장하고 있고 로그인 성공 시 다시 재요청함
+      //토큰도 저장하고 있고 로그인 성공시 다시 재요청함!
       const previousPath = from ? `${from.pathname}${from.search ?? ""}` : "/";
 
       navigate(previousPath ?? "/", {

@@ -1,18 +1,15 @@
 import { useMutation } from "@tanstack/react-query";
-
 import { CheckCircle2, QrCode, TriangleAlert } from "lucide-react";
-
 import { Link, useSearchParams } from "react-router";
-
 import { checkin } from "../api/checkinApi";
-
 import { getApiErrorMessage } from "../utils/getApiErrorMessage";
 
 function CheckinPage() {
+  //url 쿼리 스트링 저장
   const [searchParams] = useSearchParams();
-
+  //토큰 저장
   const token = searchParams.get("token");
-
+  //벡엔드에 체크인 요청
   const checkinMutation = useMutation({
     mutationFn: () => checkin(token),
   });
@@ -38,13 +35,38 @@ function CheckinPage() {
           <p className="mt-3 text-slate-500">
             관광지 방문 체크인이 완료되었습니다.
           </p>
-
-          <Link
-            to="/map"
-            className="mt-7 inline-block rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white"
+          <div
+            className="
+  mt-7 flex
+  justify-center gap-3
+"
           >
-            관광 지도로 돌아가기
-          </Link>
+            <Link
+              to="/stamps"
+              className="
+      rounded-xl
+      bg-amber-500
+      px-6 py-3
+      font-semibold
+      text-white
+    "
+            >
+              내 스탬프 보기
+            </Link>
+
+            <Link
+              to="/map"
+              className="
+      rounded-xl
+      bg-blue-600
+      px-6 py-3
+      font-semibold
+      text-white
+    "
+            >
+              다음 장소 찾기
+            </Link>
+          </div>
         </div>
       </section>
     );

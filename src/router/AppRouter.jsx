@@ -4,10 +4,6 @@ import AdminRoute from "../components/auth/AdminRoute";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 import MainLayout from "../components/layout/MainLayout";
 
-import AdminPlaceFormPage from "../pages/admin/AdminPlaceFormPage";
-import AdminPlaceListPage from "../pages/admin/AdminPlaceListPage";
-import AdminPlaceQrPage from "../pages/admin/AdminPlaceQrPage";
-
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
 import MyPage from "../pages/MyPage";
@@ -15,8 +11,11 @@ import NotFoundPage from "../pages/NotFoundPage";
 import PlaceDetailPage from "../pages/PlaceDetailPage";
 import PlaceListPage from "../pages/PlaceListPage";
 import SignupPage from "../pages/SignupPage";
+import AdminPlaceListPage from "../pages/admin/AdminPlaceListPage";
+import AdminPlaceFormPage from "../pages/admin/AdminPlaceFormPage";
 import KakaoSearchPage from "../pages/admin/KakaoSearchPage";
 import MapPage from "../pages/MapPage";
+import AdminPlaceQrPage from "../pages/admin/AdminPlaceQrPage";
 import CheckinPage from "../pages/CheckinPage";
 import StampBookPage from "../pages/StampBookPage";
 
@@ -49,11 +48,16 @@ function AppRouter() {
         {/* 관리자 전용 */}
         <Route path="admin" element={<AdminRoute />}>
           <Route index element={<Navigate to="places" replace />} />
+
           <Route path="places" element={<AdminPlaceListPage />} />
+
           <Route path="places/new" element={<AdminPlaceFormPage />} />
+
           <Route path="places/:placeId/edit" element={<AdminPlaceFormPage />} />
+
           <Route path="places/:placeId/qr" element={<AdminPlaceQrPage />} />
 
+          {/* 카카오 검색 추가 */}
           <Route path="kakao-search" element={<KakaoSearchPage />} />
         </Route>
 
