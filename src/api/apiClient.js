@@ -2,7 +2,7 @@ import axios from "axios";
 import { useAuthStore } from "../stores/authStore";
 
 const apiClient = axios.create({
-  baseURL: "/api",
+  baseURL: "https://busanstamp-69a9.onrender.com/api",
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",
