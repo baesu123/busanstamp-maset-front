@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { importKakaoPlace, searchKakaoPlaces } from "../../api/kakaoApi";
 
 import AdminPageHeader from "../../components/admin/AdminPageHeader";
-import KakaoPlaceCard from "../../components/admin/KakaoPlaceCard";
+import KakaoPlaceCard from "../../components/admin/kakaoPlaceCard";
 import KakaoPlaceImportForm from "../../components/admin/KakaoPlaceImportForm";
 
 import { getApiErrorMessage } from "../../utils/getApiErrorMessage";
